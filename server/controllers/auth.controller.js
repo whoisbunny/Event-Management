@@ -56,7 +56,6 @@ export const login = async (req, res) => {
       user,
       token,
       expiryDate,
-      // env: process.env.ADMIN_PANEL,
     });
   } catch (error) {
     res.status(500).json({ message: "Error logging in", error: error.message });
