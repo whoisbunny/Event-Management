@@ -9,10 +9,9 @@ const EventPostPage: React.FC = () => {
   const dispatch = useAppDispatch();
   return (
     <div>
-      <div className="flex flex-wrap justify-between items-center mb-4 px-8 py-4">
-        <h4 className="font-medium lg:text-2xl text-xl capitalize text-slate-500 inline-block ">
-          events
-        </h4>
+      <div className="flex flex-wrap justify-between items-center  px-8 py-4">
+        <h1 className="text-4xl font-bold mb-4">Event</h1>
+
         <div className={` md:flex md:space-x-4 md:justify-end items-center `}>
           <Button
             variant={"ghost"}
@@ -25,9 +24,7 @@ const EventPostPage: React.FC = () => {
       </div>
 
       <div>
-
-<EventList  />
-
+        <EventList />
       </div>
       <AddEvent />
       <EditEvent />

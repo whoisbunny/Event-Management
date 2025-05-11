@@ -168,7 +168,7 @@ const EventList: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto py-10 px-4">
+    <div className="container mx-auto py-6 px-4">
       <DataTable
         columns={columns}
         data={data}
