@@ -1,3 +1,4 @@
+import { populate } from "dotenv";
 import Event from "../models/event.model.js";
 import mongoose from "mongoose";
 
@@ -8,7 +9,7 @@ export const createEvent = async (req, res) => {
   try {
     const createdBy = req.user._id; //  user ID JWT token mathi aavse
     const event = await Event.create({ name, description, date, createdBy });
-    res.status(201).json(event);
+    res.status(201).json({ event, message: "Event created successfully" });
   } catch (error) {
     res
       .status(500)
@@ -26,17 +27,16 @@ export const getAllEvents = async (req, res) => {
       limit = 10,
       sortField = "date",
       sortOrder = "desc",
-      search = "",
+      globalFilter = "",
     } = req.query;
 
-    const query = {};
+    const query = { createdBy };
 
-    if (search) {
-      const regex = new RegExp(search, "i"); // case-insensitive partial match
+    if (globalFilter) {
+      const regex = new RegExp(globalFilter, "i");
       query.$or = [
         { name: { $regex: regex } },
         { description: { $regex: regex } },
-        { createdBy: createdBy },
       ];
     }
 
@@ -44,6 +44,8 @@ export const getAllEvents = async (req, res) => {
       page: parseInt(page),
       limit: parseInt(limit),
       sort: { [sortField]: sortOrder === "desc" ? -1 : 1 },
+      select: "-createdAt -updatedAt -__v",
+      populate: { path: "createdBy", select: "name" },
     };
 
     const result = await Event.paginate(query, options);
@@ -54,6 +56,8 @@ export const getAllEvents = async (req, res) => {
       totalPages: result.totalPages,
       page: result.page,
       limit: result.limit,
+      hasNextPage: result.hasNextPage,
+      hasPrevPage: result.hasPrevPage,
     });
   } catch (error) {
     res
@@ -71,7 +75,6 @@ export const getEventById = async (req, res) => {
   }
 
   try {
-
     const event = await Event.findById(id);
     if (!event) {
       return res.status(404).json({ message: "Event not found" });
@@ -88,7 +91,7 @@ export const getEventById = async (req, res) => {
 
 export const updateEvent = async (req, res) => {
   const { id } = req.params;
-  const createdBy = req.user._id; 
+  const createdBy = req.user._id;
 
   const { name, description, date } = req.body;
 
@@ -99,7 +102,7 @@ export const updateEvent = async (req, res) => {
   try {
     const event = await Event.findByIdAndUpdate(
       id,
-      { name, description, date,createdBy },
+      { name, description, date, createdBy },
       { new: true }
     );
     if (!event) {

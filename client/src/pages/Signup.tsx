@@ -1,9 +1,9 @@
 import SignupForm from "@/components/signup-form";
 import ThemeSwitcher from "@/components/theme-switcher";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAppSelector } from "@/store";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -27,6 +27,16 @@ const Signup = () => {
             <CardContent>
               <SignupForm />
             </CardContent>
+            <CardFooter>
+              <div className="text-center w-full">
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Already have an account?{" "}
+                  <Link to="/" className="text-blue-500 hover:underline">
+                    Login
+                  </Link>
+                </p>
+              </div>
+            </CardFooter>
           </Card>
         </div>
       </div>

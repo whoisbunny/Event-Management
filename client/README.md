@@ -1,54 +1,171 @@
-# React + TypeScript + Vite
+# Event Management System Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, responsive web application built with React, TypeScript, Redux Toolkit, and Shadcn UI components powered by Tailwind CSS.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 🔐 User Authentication (Login/Signup)
+- 📅 Event Management (Create, Read, Update, Delete)
+- 🎨 Modern UI with Shadcn UI Components
+- 🌓 Dark/Light Theme Support
+- 📱 Fully Responsive Design
+- 🔄 Real-time Form Validation
+- 🚀 Redux State Management
+- ⚡ Vite for Fast Development
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Framework**: React + TypeScript
+- **Styling**: Tailwind CSS
+- **UI Components**: Shadcn UI
+- **State Management**: Redux Toolkit
+- **Build Tool**: Vite
+- **Form Validation**: Zod
+- **HTTP Client**: Axios
+- **Notifications**: React Toastify
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Requirements
+
+- Node.js 16.x or higher
+- npm or yarn package manager
+
+## Getting Started
+
+1. Clone the repository
+2. Install dependencies:
+```bash
+npm install
+# or
+yarn install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+3. Start the development server:
+```bash
+npm run dev
+# or
+yarn dev
 ```
+
+## Project Structure
+
+```
+src/
+├── components/      # Reusable UI components
+├── configs/         # API configuration
+├── hooks/          # Custom React hooks
+├── pages/          # Page components
+├── services/       # API service functions
+├── store/          # Redux store and reducers
+└── utils/          # Utility functions and types
+```
+
+## Features in Detail
+
+### Authentication
+- Login and Signup functionality
+- Protected routes
+- Auto logout on token expiry
+
+### Event Management
+- List events with pagination
+- Create new events
+- Edit existing events
+- Delete events
+- Search and filter events
+
+### UI Components
+- Responsive navigation
+- Modal dialogs
+- Data tables
+- Form components
+- Loading states
+- Toast notifications
+
+## API Services
+
+### Authentication Service (`auth.service.ts`)
+- Login: `POST /auth/login`
+- Signup: `POST /auth/signup`
+- Logout: `GET /auth/logout`
+- Get user profile: `GET /auth/profile`
+
+### Event Service (`event.service.ts`)
+- Get events: `GET /event/?{query}`
+- Create event: `POST /event`
+- Update event: `PUT /event/:id`
+- Delete event: `DELETE /event/:id`
+
+## State Management
+
+### Auth Reducer (`authReducer.ts`)
+```typescript
+interface AuthState {
+  isAuthenticated: boolean;
+  user: User | null;
+  loading: boolean;
+  error: string | null;
+  token: string | null;
+  isLoggedin: boolean;
+}
+```
+
+### Event Reducer (`eventReducer.ts`)
+```typescript
+interface EventState {
+  events: IEventList | null;
+  loading: boolean;
+  error: string | null;
+  editEventModal: boolean;
+  editItem: IEvent | null;
+  openEventModal: boolean;
+}
+```
+
+## Responsive Design
+
+The application is fully responsive and works seamlessly across:
+- Desktop
+- Tablet
+- Mobile devices
+
+This is achieved through:
+- Tailwind CSS breakpoints
+- Flexible grid layouts
+- Mobile-first approach
+- Responsive navigation
+
+## Theme Support
+
+- Built-in dark/light mode using Shadcn UI theming
+- System preference detection
+- Persistent theme selection
+- Custom theme configuration in `components.json`
+
+## Development
+
+### Available Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint
+- `npm run type-check` - Run TypeScript type checking
+
+### Code Style
+
+The project uses:
+- ESLint for code linting
+- Prettier for code formatting
+- TypeScript for type safety
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
+
+## License
+
+MIT License

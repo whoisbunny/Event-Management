@@ -1,5 +1,10 @@
-import { createEvent, getEvents, updateEventData } from "@/services/event.service";
-import type { IEvent, IEventList } from "@/utils/types";
+import {
+  createEvent,
+  deleteEvent,
+  getEvents,
+  updateEventData,
+} from "@/services/event.service";
+import type { IAddEvent, IEvent, IEventList } from "@/utils/types";
 import {
   createSlice,
   createAsyncThunk,
@@ -35,20 +40,9 @@ export const fetchEvents = createAsyncThunk(
   }
 );
 
-//   export const fetchClientById = createAsyncThunk(
-//     "event/fetchEventById",
-//     async (id: string, { rejectWithValue }) => {
-//       try {
-//         return await getClientById(id);
-//       } catch (error) {
-//         return rejectWithValue(error);
-//       }
-//     }
-//   );
-
 export const addEvent = createAsyncThunk(
   "event/addEvent",
-  async (data:IEvent, { rejectWithValue }) => {
+  async (data: IAddEvent, { rejectWithValue }) => {
     try {
       return await createEvent(data);
     } catch (error) {
@@ -59,7 +53,7 @@ export const addEvent = createAsyncThunk(
 
 export const editEvent = createAsyncThunk(
   "event/editEvent",
-  async (data:IEvent, { rejectWithValue }) => {
+  async (data: IAddEvent, { rejectWithValue }) => {
     try {
       return await updateEventData(data);
     } catch (error) {
@@ -113,13 +107,13 @@ const eventSlice = createSlice({
       })
       .addCase(editEvent.fulfilled, (state, action) => {
         state.editItem = null;
-        // state.editClientModal = false;
-        state.events.data =
-          state.events?.data?.map((event) =>
+        if (state.events && state.events.data) {
+          state.events.data = state.events.data.map((event) =>
             event._id === action.payload.event?._id
-              ? action.payload.client
+              ? action.payload.event
               : event
-          ) || null;
+          );
+        }
         toast.success(action.payload.message);
       })
       .addCase(editEvent.rejected, (state, action) => {
@@ -127,7 +121,18 @@ const eventSlice = createSlice({
         state.error = action.payload as string;
         toast.error(action.payload as string);
       })
+      .addCase(addEvent.fulfilled, (state, action) => {
+        state.loading = false;
+        toast.success(action.payload.message);
+      })
+      .addCase(addEvent.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+        toast.error(action.payload as string);
+      })
+
       .addCase(removeEvent.fulfilled, (state, action) => {
+        state.loading = false
         toast.success(action.payload.message);
       })
       .addCase(removeEvent.rejected, (state, action) => {

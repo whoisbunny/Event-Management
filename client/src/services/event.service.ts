@@ -1,18 +1,18 @@
 import API from "@/configs/API";
-import type { IEvent } from "@/utils/types";
+import type { IAddEvent } from "@/utils/types";
 
 export const getEvents = async (query: string) => {
   try {
-    const response = await API.get(`events/?${query}`);
+    const response = await API.get(`event/?${query}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching events:", error);
     throw error;
   }
 };
-export const createEvent = async (eventData: object) => {
+export const createEvent = async (eventData:IAddEvent) => {
   try {
-    const response = await API.post("events/", eventData);
+    const response = await API.post("event", eventData);
     return response.data;
   } catch (error) {
     console.error("Error creating event:", error);
@@ -20,9 +20,9 @@ export const createEvent = async (eventData: object) => {
   }
 };
 
-export const updateEventData = async (eventData: IEvent) => {
+export const updateEventData = async (eventData: IAddEvent) => {
   try {
-    const response = await API.put(`events/${eventData?._id}/`, eventData);
+    const response = await API.put(`event/${eventData?._id}/`, eventData);
     return response.data;
   } catch (error) {
     console.error("Error updating event:", error);
@@ -32,7 +32,7 @@ export const updateEventData = async (eventData: IEvent) => {
 
 export const deleteEvent = async (id: string) => {
   try {
-    const response = await API.delete(`events/${id}`);
+    const response = await API.delete(`event/${id}`);
     return response.data;
   } catch (error) {
     console.error("Error deleting event:", error);

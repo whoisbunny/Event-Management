@@ -21,7 +21,10 @@ export const signup = async (req, res) => {
       user._id
     );
 
-    res.status(201).json({ user, token });
+        const expiryDate = calculateExpiryDate();
+
+
+    res.status(201).json({ user, token ,expiryDate});
   } catch (error) {
     res
       .status(500)
@@ -43,7 +46,7 @@ export const login = async (req, res) => {
     if (!isMatch) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
-    const { token, refreshToken } = await generateAccessAndRefereshTokens(
+    const { token } = await generateAccessAndRefereshTokens(
       user._id
     );
 
@@ -127,7 +130,7 @@ export const Logout = async (req, res) => {
     }
   );
 
-  
+  // if we have to handle cookies and more to handle logout from backend then we use 
 
   return res
     .status(200)

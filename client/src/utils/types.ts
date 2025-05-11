@@ -14,5 +14,32 @@ export interface LoginCredentials {
   password: string;
 }
 
-export interface IEventList {}
-export interface IEvent {}
+export interface IEvent {
+  _id: string;
+  name: string;
+  description: string;
+  date: string;
+  createdBy: {
+    _id: string;
+    name: string;
+  };
+}
+
+export interface IEventList {
+  data: IEvent[] | null;
+  totalData: number;
+  limit: number;
+  totalPages: number;
+  page: number;
+  hasPrevPage: boolean;
+  hasNextPage: boolean;
+  prevPage?: number | null;
+  nextPage?: number | null;
+}
+
+export interface IAddEvent {
+  _id?: string;
+  name: string;
+  description: string;
+  date: string;
+}

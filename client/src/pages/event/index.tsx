@@ -3,8 +3,9 @@ import { useAppDispatch } from "@/store";
 import AddEvent from "./AddEvent";
 import EditEvent from "./EditEvent";
 import EventList from "./EventList";
+import { handleEventModal } from "@/store/eventReducer";
 
-const EventPostPage:React.FC  = () => {
+const EventPostPage: React.FC = () => {
   const dispatch = useAppDispatch();
   return (
     <div>
@@ -12,29 +13,24 @@ const EventPostPage:React.FC  = () => {
         <h4 className="font-medium lg:text-2xl text-xl capitalize text-slate-500 inline-block ">
           events
         </h4>
-        <div
-          className={` md:flex md:space-x-4 md:justify-end items-center `}
-        >
-          
-          
+        <div className={` md:flex md:space-x-4 md:justify-end items-center `}>
           <Button
-          variant={'ghost'}
-            // icon="heroicons-outline:plus"
-            className="btn-dark dark:bg-slate-800 bg-slate-600 text-white font-semibold h-min text-sm font-normal"
-            // onClick={() => dispatch(toggleAddModal(true))}
+            variant={"ghost"}
+            className="btn-dark dark:bg-slate-800 bg-slate-600 text-white font-semibold h-min text-sm "
+            onClick={() => dispatch(handleEventModal(true))}
           >
-            Add User
+            Add Event
           </Button>
         </div>
       </div>
 
-      {/* {filler === "list" && !isLoaded && ( */}
       <div>
-        {/* <EventList events={users} /> */}
-        </div>
-      {/* )} */}
+
+<EventList  />
+
+      </div>
       <AddEvent />
-    <EditEvent />
+      <EditEvent />
     </div>
   );
 };

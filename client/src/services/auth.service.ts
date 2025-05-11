@@ -16,6 +16,7 @@ const signup = async (data: LoginCredentials) => {
 
   if (res.data) {
     localStorage.setItem("TOKEN", res.data.token);
+    localStorage.setItem("expiryDate", JSON.stringify(res.data.expiryDate));
   }
   return res.data;
 };
