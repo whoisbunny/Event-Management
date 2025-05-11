@@ -46,6 +46,19 @@ npm run dev
 yarn dev
 ```
 
+## Environment Variables
+
+To run this project, you will need to add the following environment variable to your `.env` file:
+
+
+```env
+VITE_API_URL="http://localhost:4000/api/"
+```
+
+### Notes:
+- `VITE_API_URL` is the base URL for the backend API and make sure to add `/api/` on end of your backend API
+
+
 ## Project Structure
 
 ```

@@ -499,3 +499,22 @@ Most endpoints require authentication using JWT (JSON Web Token). To authenticat
 - Authentication tokens expire after a set period
 - Passwords are hashed using bcrypt before storage
 - Refresh tokens are used for secure session management
+
+## Environment Variables
+
+To run this project, you will need to add the following environment variables to your `.env` file:
+
+```env
+PORT=4000
+MONGODB_URI=mongodb+srv://<username>:<password>@cluster0.49lzarp.mongodb.net/Event_Management-Upforce_Tech
+JWT_SECRET=your_jwt_secret
+JWT_REFRESH_SECRET=your_jwt_refresh_secret
+REFRESH_TOKEN_EXPIRY=10d
+TOKEN_EXPIRY=2d
+NODE_ENV=development
+CLIENT=http://localhost:3000
+```
+
+### Notes:
+- Replace `<username>` and `<password>` in `MONGODB_URI` with your MongoDB credentials.
+- Use secure and unique values for `JWT_SECRET` and `JWT_REFRESH_SECRET`.
