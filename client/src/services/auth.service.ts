@@ -1,26 +1,21 @@
 import API from "@/configs/API";
 import type { LoginCredentials } from "@/utils/types";
 
-const login = async (data:LoginCredentials) => {
+const login = async (data: LoginCredentials) => {
   const res = await API.post(`auth/login`, data);
 
   if (res.data) {
     localStorage.setItem("TOKEN", res.data.token);
-    localStorage.setItem("REFRESH_TOKEN", res.data.refreshToken);
-    window.localStorage.setItem(
-      "expiryDate",
-      JSON.stringify(res.data.expiryDate)
-    );
+    localStorage.setItem("expiryDate", JSON.stringify(res.data.expiryDate));
   }
   return res.data;
 };
 
-const signup = async (data:LoginCredentials) => {
-  const res = await API.post(`auth/register`, data);
+const signup = async (data: LoginCredentials) => {
+  const res = await API.post(`auth/signup`, data);
 
   if (res.data) {
     localStorage.setItem("TOKEN", res.data.token);
-    localStorage.setItem("REFRESH_TOKEN", res.data.refreshToken);
   }
   return res.data;
 };
@@ -30,13 +25,16 @@ const logout = async () => {
 
   if (res.data) {
     localStorage.removeItem("TOKEN");
-    localStorage.removeItem("REFRESH_TOKEN");
+    localStorage.removeItem("expiryDate");
+    localStorage.removeItem("USER");
   }
   return res.data;
 };
 const getProfile = async () => {
   const res = await API.get(`auth/profile`);
-
+  if (res.data) {
+    localStorage.setItem("USER", JSON.stringify(res.data));
+  }
   return res.data;
 };
 

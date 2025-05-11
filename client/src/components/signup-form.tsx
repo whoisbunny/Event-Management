@@ -4,8 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {  useNavigate } from "react-router-dom";
-import { getUserProfile, loginAsync } from "@/store/authReducer";
+import { useNavigate } from "react-router-dom";
+import { getUserProfile, signupAsync } from "@/store/authReducer";
 import { useAppDispatch } from "@/store";
 import {
   Form,
@@ -15,7 +15,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+
 const schema = z.object({
+  name: z.string().min(1, { message: "Name is required" }),
   email: z.string().email({ message: "Invalid email address" }),
   password: z
     .string()
@@ -24,39 +26,49 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-const LoginForm: React.FC = () => {
+const SignupForm: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
+      name: "",
       email: "",
       password: "",
     },
   });
-  const onSubmit = (data: FormData) => {
-    
-      // Perform login action
-      dispatch(loginAsync(data)).then(
-        (action) => {
-          if (loginAsync.fulfilled.match(action)) {
-            dispatch(getUserProfile());
 
-            setTimeout(() => {
-              navigate("/event");
-            }, 500);
-          }
-        }
-      );
-    
-  
+  const onSubmit = (data: FormData) => {
+    dispatch(signupAsync(data)).then((action) => {
+      if (signupAsync.fulfilled.match(action)) {
+        dispatch(getUserProfile());
+
+        setTimeout(() => {
+          navigate("/event");
+        }, 500);
+      }
+    });
   };
 
   return (
-    <div className="login-container">
+    <div className="signup-container">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter name" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <FormField
             control={form.control}
             name="email"
@@ -64,7 +76,7 @@ const LoginForm: React.FC = () => {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter name" {...field} />
+                  <Input placeholder="Enter email" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -84,11 +96,11 @@ const LoginForm: React.FC = () => {
               </FormItem>
             )}
           />
-          <Button type="submit">Login</Button>
+          <Button type="submit">Sign Up</Button>
         </form>
       </Form>
     </div>
   );
 };
 
-export default LoginForm;
+export default SignupForm;

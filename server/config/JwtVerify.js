@@ -1,12 +1,12 @@
 import jwt from "jsonwebtoken";
 import USER from "../models/user.model.js";
 
-export function generateAuthToken(userId) {
+export const generateAuthToken = (userId) => {
   const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
     expiresIn: process.env.TOKEN_EXPIRY,
   });
   return token;
-}
+};
 
 export const generateRefreshToken = (userId) => {
   return jwt.sign({ userId }, process.env.JWT_REFRESH_SECRET, {

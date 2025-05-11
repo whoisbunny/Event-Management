@@ -1,5 +1,4 @@
-
-import { Home } from "lucide-react";
+import { FileText, Home, Info } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -13,32 +12,36 @@ import {
 } from "@/components/ui/sidebar";
 import { Button } from "./ui/button";
 // import { useAppDispatch } from "@/store";
-import { Link } from "react-router-dom";
-// import { logoutUser } from "@/redux/reducers/authReducer";
-
-// Menu items.
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "@/store";
+import { logoutUser } from "@/store/authReducer";
 
 export function AppSidebar() {
-  const items = [{ title: " dashboard", url: "/dashboard", icon: Home }];
-
-  // const dispatch = useAppDispatch();
+  const items = [
+    { title: "Events", url: "/event", icon: Home },
+    { title: "About", url: "/about", icon: Info },
+    { title: "Not Found Page", url: "/404", icon: FileText },
+  ];
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const handleLogout = () => {
-    // dispatch(logoutUser()).then((action) => {
-    //   if (logoutUser.fulfilled.match(action)) {
-    //     console.log("Logout successful");
-    //     router.push("/");
-    //   } else {
-    //     console.log("Logout failed");
-    //   }
-    // });
+    dispatch(logoutUser()).then((action) => {
+      if (logoutUser.fulfilled.match(action)) {
+        console.log("Logout successful");
+        navigate("/");
+      } else {
+        console.log("Logout failed");
+      }
+    });
   };
-  // const { user } = useAppSelector((state) => state.auth);
+  const { user } = useAppSelector((state) => state.auth);
 
   return (
     <Sidebar className="bg-white dark:bg-gray-800">
       <SidebarHeader className="bg-white dark:bg-gray-800">
         <div className="bg-white dark:bg-gray-800 p-4 shadow-md rounded-lg border">
-          {/* <Link href={"/profile"} className="flex items-center space-x-4">
+          <Link to={"/profile"} className="flex items-center space-x-4">
             <img
               className="w-12 h-12 rounded-full"
               src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auhref=format&fit=facearea&facepad=2&w=256&h=256&q=80"
@@ -54,7 +57,7 @@ export function AppSidebar() {
                 {user ? user.email : "johndoe@example.com"}
               </p>
             </div>
-          </Link> */}
+          </Link>
         </div>
       </SidebarHeader>
       <SidebarContent className="bg-white dark:bg-gray-800">
@@ -63,7 +66,7 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu className="gap-3">
               {items.map((item) => {
-                const isActive = true;
+                const isActive = pathname === item.url;
                 return (
                   <SidebarMenuItem key={item.title} className="">
                     <SidebarMenuButton asChild>

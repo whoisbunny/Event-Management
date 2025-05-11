@@ -6,12 +6,13 @@ import { Provider } from "react-redux";
 import store from "@/store/index.ts";
 import { ThemeProvider } from "./components/theme-provider.tsx";
 import { SidebarProvider } from "./components/ui/sidebar.tsx";
-
+import { ToastContainer } from "react-toastify";
 createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
     <SidebarProvider>
       <Provider store={store}>
         <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+        <ToastContainer />
           <App />
         </ThemeProvider>
       </Provider>

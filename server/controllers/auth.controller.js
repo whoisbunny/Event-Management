@@ -8,7 +8,7 @@ import {
 
 // Signup Controller
 export const signup = async (req, res) => {
-  const { name, email, password, role } = req.body;
+  const { name, email, password } = req.body;
 
   try {
     const userExists = await User.findOne({ email });
@@ -16,8 +16,8 @@ export const signup = async (req, res) => {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    const user = await User.create({ name, email, password, role });
-    const { token, refreshToken } = await generateAccessAndRefereshTokens(
+    const user = await User.create({ name, email, password });
+    const { token } = await generateAccessAndRefereshTokens(
       user._id
     );
 
@@ -53,7 +53,6 @@ export const login = async (req, res) => {
       user,
       token,
       expiryDate,
-      refreshToken,
       // env: process.env.ADMIN_PANEL,
     });
   } catch (error) {

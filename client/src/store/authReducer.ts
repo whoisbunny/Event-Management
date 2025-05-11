@@ -1,10 +1,14 @@
-import { getProfile, login, logout } from "@/services/auth.service";
+import { getProfile, login, logout, signup } from "@/services/auth.service";
 import type { User } from "@/utils/types";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
 
 const initialIsAuth = () => {
   const token = localStorage.getItem("TOKEN");
   const date = localStorage.getItem("expiryDate");
+  if (!token || !date) {
+    return false;
+  }
   if (date && token) {
     const currentDate = new Date();
     const expiryDate = new Date(JSON.parse(date));
@@ -18,6 +22,11 @@ const initialIsAuth = () => {
   return false;
 };
 
+const initUser = () => {
+  return localStorage.getItem("USER")
+    ? JSON.parse(localStorage.getItem("USER") as string)
+    : null;
+};
 interface AuthState {
   isAuthenticated: boolean;
   user: User | null;
@@ -29,7 +38,7 @@ interface AuthState {
 
 const initialAuthState: AuthState = {
   isAuthenticated: false,
-  user: null,
+  user: initUser(),
   loading: false,
   error: null,
   token: null,
@@ -61,7 +70,7 @@ export const loginAsync = createAsyncThunk(
     } catch (error) {
       console.log(error);
 
-      return rejectWithValue("Login failed");
+      return rejectWithValue(error);
     }
   }
 );
@@ -70,19 +79,17 @@ export const loginAsync = createAsyncThunk(
 export const signupAsync = createAsyncThunk(
   "auth/signupAsync",
   async (
-    userData: { username: string; password: string },
+    userData: { email: string; password: string },
     { rejectWithValue }
   ) => {
     try {
       // Simulate API call
-      const response = await new Promise<{ user: string }>((resolve) =>
-        setTimeout(() => resolve({ user: userData.username }), 1000)
-      );
+      const response = await signup(userData);
       return response.user;
     } catch (error) {
       console.log(error);
 
-      return rejectWithValue("Signup failed");
+      return rejectWithValue(error);
     }
   }
 );
@@ -122,22 +129,26 @@ const authSlice = createSlice({
         state.isAuthenticated = true;
         state.user = action.payload.user;
         state.token = action.payload?.token;
+        toast.success(action.payload.message);
       })
       .addCase(loginAsync.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
+        toast.error(action.payload as string);
       })
       .addCase(signupAsync.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(signupAsync.fulfilled, (state) => {
+      .addCase(signupAsync.fulfilled, (state, action) => {
         state.loading = false;
         state.isAuthenticated = true;
+        toast.success(action.payload.message || "Signup successful");
       })
       .addCase(signupAsync.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
+        toast.error(action.payload as string);
       });
     builder.addCase(getLoginState.fulfilled, (state, action) => {
       state.isAuthenticated = action.payload;
