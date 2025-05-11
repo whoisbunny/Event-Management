@@ -3,7 +3,6 @@ import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./config/connectDB.js";
 import morgan from "morgan";
-// import clientRouter from "./routes/client.routes.js";
 import authRouter from "./routes/auth.route.js";
 import eventRouter from "./routes/event.route.js";
 dotenv.config();
@@ -13,12 +12,7 @@ const PORT = process.env.PORT || 5000;
 
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-      "http://localhost:3001",
-      "https://jay-jinendra-health-care.vercel.app",
-      "https://admin-jay-jinendra-health-care.vercel.app",
-    ],
+    origin: [process.env.CLIENT],
     credentials: true, // Allow credentials for cross-origin requests
   })
 );
