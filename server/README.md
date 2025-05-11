@@ -70,8 +70,8 @@ The request body should be a JSON object containing the following fields:
 Example:
 ```json
 {
-  "email": "john.doe@example.com",
-  "password": "password123"
+  "email": "admin@example.com",
+  "password": "Admin@123"
 }
 ```
 
